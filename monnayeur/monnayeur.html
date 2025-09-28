@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>NSI Projects - Monnayeur</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="header">
+            <a class="icon home" href="../index.html"><i class="fa-solid fa-house-user"></i></a>
+            <h2>Le jeu du Monnayeur</h2>
+            <a class="icon github" target="_blank" href="https://github.com/NSI-Projects/nsi-projects.github.io/tree/main/monnayeur"><i class="fa-brands fa-github"></i></a>
+        </div>
+        <main class="container">
+            <div class="box">
+                <p>Voici ici la monnaie que vous voudrez monnayer :</p>
+                <input placeholder="Entrez votre monnaie à monnayer !" type="text" class="inputnum" id="inputnum">
+            </div>
+
+            <div class="box">
+                <p>Et apparaîtra ici votre monnaie échangée :</p>
+                <p id="result" style="color: gray;">Apparaîtra ici votre monnaie</p>
+            </div>
+        </main>
+        <button class="monnayeurButton" id="monnayeurButton">Monnayer !</button>
+    </body>
+    <script src="script.js"></script>
+</html>

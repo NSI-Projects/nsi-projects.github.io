@@ -1,0 +1,95 @@
+body { 
+    background-color:#1e1e1e;
+    color:#f0f0f0;
+    font-family:Consolas, 
+    monospace;
+    margin:0;
+    padding:0; 
+}
+.header {
+    align-items:center;
+    padding:1vw 2vh;
+    background:#2c2c2c;
+    box-shadow:0 0 5vw rgba(0,0,0,0.4);
+}
+.icon {
+    transition: all 0.2s ease;
+    cursor:pointer;
+    font-size: 3vw;
+    color: #fff;
+    position: fixed;
+    top : 1.5vh;
+}
+.icon:hover {
+    transform: translateY(-0.5vh);
+}
+.icon.home {
+    left: 2vw;
+}
+.icon.github {
+    right: 2vw;
+}
+
+h2 {
+    text-align:center;
+    color:#fff;
+    margin: 1vh 0;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 3vw;
+    margin-top: 10vh;
+}
+
+.box {
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    gap: 5vh;
+}
+
+.box p, .box input {
+    padding: 1vw 2vh;
+    background-color:#2c2c2c;
+    color:#f0f0f0;
+    border:1px solid #f0f0f0;
+    border-radius:6px;
+    height: 6vh;
+    margin: 0;
+    font-size: 1.1vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family:Consolas, monospace;
+}
+
+button {
+    padding:1vw 2vh;
+    background-color:#2c2c2c;
+    color:#f0f0f0;
+    border:1px solid #f0f0f0;
+    border-radius:6px;
+    width: 18vw;
+    height: 10vh;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    margin: 5vh auto 0 auto;
+    display: block;
+    font-family:Consolas, monospace;
+}
+button:hover {
+    transform: translateY(-0.4vh);
+    background-color:#171717;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
