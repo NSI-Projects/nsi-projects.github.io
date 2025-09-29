@@ -7,6 +7,8 @@ button.addEventListener('click', monnayeur);
 function monnayeur() {
     let value = input.value.trim();
 
+    input.value = "";
+
     if (value === "") {
         result.textContent = "Veuillez entrer un nombre !";
         result.style.color = "red";
