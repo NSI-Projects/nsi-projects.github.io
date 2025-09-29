@@ -8,12 +8,12 @@ body {
 }
 .header {
     align-items:center;
-    padding:1vw 2vh;
+    padding:1vw;
     background:#2c2c2c;
     box-shadow:0 0 5vw rgba(0,0,0,0.4);
 }
 .icon {
-    transition: all 0.2s ease;
+    transition: all 0.5s ease;
     cursor:pointer;
     font-size: 3vw;
     color: #fff;
@@ -34,6 +34,7 @@ h2 {
     text-align:center;
     color:#fff;
     margin: 1vh 0;
+    font-size: 2vw;
 }
 
 .container {
@@ -53,7 +54,7 @@ h2 {
 }
 
 .box p, .box input {
-    padding: 1vw 2vh;
+    padding: 1vw;
     background-color:#2c2c2c;
     color:#f0f0f0;
     border:1px solid #f0f0f0;
@@ -69,19 +70,20 @@ h2 {
 }
 
 button {
-    padding:1vw 2vh;
+    padding:1vw;
     background-color:#2c2c2c;
     color:#f0f0f0;
     border:1px solid #f0f0f0;
     border-radius:6px;
     width: 18vw;
-    height: 10vh;
+    aspect-ratio: 5/1;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     margin: 5vh auto 0 auto;
     display: block;
     font-family:Consolas, monospace;
+    font-size: 1.1vw;
 }
 button:hover {
     transform: translateY(-0.4vh);
