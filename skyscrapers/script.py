@@ -158,6 +158,7 @@ def launch_creation(ev) -> None:
     while not generated:
         try:
             grille, nbs = create_grille(size)
+            document["checkbox"].checked = False
             print_list(grille, nbs, size)
             generated = True
         except:
@@ -166,3 +167,4 @@ def launch_creation(ev) -> None:
 run_btn = document["generate"]
 
 run_btn.bind("click", launch_creation)
+
