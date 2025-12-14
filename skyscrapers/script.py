@@ -153,6 +153,8 @@ def create_grille(size: int) -> Tuple[List[List[Union[List[int], int]]], List[Li
 
 def launch_creation(ev) -> None:
     size: int = int(document["size"].value)
+    if size < 1 or size > 10:
+        return
 
     generated = False
     while not generated:
@@ -165,6 +167,4 @@ def launch_creation(ev) -> None:
             pass
 
 run_btn = document["generate"]
-
 run_btn.bind("click", launch_creation)
-
