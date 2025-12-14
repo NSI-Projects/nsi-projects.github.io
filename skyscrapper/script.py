@@ -118,12 +118,12 @@ def print_list(possibilities: List[List[Union[List[int], int]]], nbs: List[List[
         for j in range(size):
             if i == 0:
                 draw_svg(svg, cell_width, cell_height, i, j+1, str(nbs[2][j]))
-            elif i == size-1:
+            if i == size-1:
                 draw_svg(svg, cell_width, cell_height, i+2, j+1, str(nbs[3][j]))
 
             if j == 0:
                 draw_svg(svg, cell_width, cell_height, i+1, j, str(nbs[0][i]))
-            elif j == size-1:
+            if j == size-1:
                 draw_svg(svg, cell_width, cell_height, i+1, j+2, str(nbs[1][i]))
             value = possibilities[i][j] if show else "X   "
             
@@ -164,4 +164,5 @@ def launch_creation(ev) -> None:
             pass
 
 run_btn = document["generate"]
+
 run_btn.bind("click", launch_creation)
