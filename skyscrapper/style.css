@@ -3,21 +3,39 @@ body {
     color:#f0f0f0;
     font-family:Consolas, monospace;
     pointer-events:visibleFill;
+    margin:0;
+    padding:0; 
 }
 
-header h1, header h2 {
-    text-align:center;
-    margin: 0;
+.header {
+    align-items:center;
+    padding:1vw;
+    background:#2c2c2c;
+    box-shadow:0 0 5vw rgba(0,0,0,0.4);
 }
-header h1 {
-    font-size: 5vmin;
+.icon {
+    transition: all 0.5s ease;
+    cursor:pointer;
+    font-size: 3vw;
+    color: #fff;
+    position: fixed;
+    top : 1.5vh;
 }
-header h2 {
-    font-size: 3vmin;
+.icon:hover {
+    transform: translateY(-0.5vh);
+}
+.icon.home {
+    left: 2vw;
+}
+.icon.github {
+    right: 2vw;
 }
 
-main {
+h2 {
     text-align:center;
+    color:#fff;
+    margin: 1vh 0;
+    font-size: 2vw;
 }
 
 .parameters {
