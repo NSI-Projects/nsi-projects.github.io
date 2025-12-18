@@ -1,4 +1,4 @@
-# from browser import document, window, DOMElement
+from browser import document, window #, DOMElement
 # from browser.html import *
 # from browser.timer import set_timeout, clear_timeout
 
