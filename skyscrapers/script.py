@@ -1,5 +1,6 @@
-from browser import document, alert, html, window, timer
-import sys, traceback
+from browser import document, window, DOMElement
+from browser.html import *
+from browser.timer import set_timeout, clear_timeout
 
 import random
 from typing import List, Tuple, Union, Sequence
@@ -50,11 +51,11 @@ def tri(nb: int, possibilities: List[List[Union[List[int], int]]], colonnes: Lis
     for i in range(len(possibilities)):
         if nb in possibilities[i]:
             for j in range(len(possibilities[i])):
-                if type(possibilities[i][j]) == list and nb in possibilities[i][j]:
+                if isinstance(possibilities[i][j], list) and nb in possibilities[i][j]:
                     possibilities[i][j].remove(nb) 
         if nb in colonnes[i]:
             for j in range(len(colonnes[i])):
-                if type(colonnes[i][j]) == list and nb in colonnes[i][j]:
+                if isinstance(colonnes[i][j], list) and nb in colonnes[i][j]:
                     possibilities[j][i].remove(nb) 
 
 def choice(nb: int, l: int, possibilities: List[List[Union[List[int], int]]], colonnes: List[List[Union[List[int], int]]]) -> None:  
@@ -87,20 +88,20 @@ def count(line: Sequence[int]) -> int:
         nb += 1
     return nb
 
-def draw_svg(svg, cell_width, cell_height, i, j, value):
+def draw_svg(svg: DOMElement, cell_width: float, cell_height: float, i: int, j: int, value: str) -> None:
     rect = f'<rect x="{(j)*cell_width}" y="{(i)*cell_height}" width="{cell_width}" height="{cell_height}" fill="#2c2c2c" stroke="#fff"/>'
     svg.html += rect
-
+ 
     text_x: float = (j)*cell_width + cell_width/2
     text_y: float = (i)*cell_height + cell_height/2
     txt = f'<text x="{text_x}" y="{text_y}" fill="white" font-family="monospace" font-size="{min(cell_width, cell_height)/2}" text-anchor="middle" dominant-baseline="middle">{value}</text>'
     svg.html += txt
 
-def on_resize(ev, possibilities: List[List[Union[List[int], int]]], nbs: List[List[int]], size: int):
+def on_resize(ev: DOMEvent, possibilities: List[List[Union[List[int], int]]], nbs: List[List[int]], size: int):
     global resize_timer
     if resize_timer:
-        timer.clear_timeout(resize_timer)
-    resize_timer = timer.set_timeout(lambda: print_list(possibilities, nbs, size), 150)
+        clear_timeout(resize_timer)
+    resize_timer = set_timeout(lambda: print_list(possibilities, nbs, size), 150)
 
 def print_list(possibilities: List[List[Union[List[int], int]]], nbs: List[List[int]], size: int) -> None:
     document["checkbox"].unbind("change")
@@ -108,7 +109,7 @@ def print_list(possibilities: List[List[Union[List[int], int]]], nbs: List[List[
 
     show = document["checkbox"].checked
 
-    svg = document["gridSVG"]
+    svg: DOMElement = document["gridSVG"]
     svg.html = ""
 
     cell_width: float = svg.width / (size+2)
@@ -125,14 +126,14 @@ def print_list(possibilities: List[List[Union[List[int], int]]], nbs: List[List[
                 draw_svg(svg, cell_width, cell_height, i+1, j, str(nbs[0][i]))
             if j == size-1:
                 draw_svg(svg, cell_width, cell_height, i+1, j+2, str(nbs[1][i]))
-            value = possibilities[i][j] if show else "X   "
+            value: str = str(possibilities[i][j]) if show else ""
             
             draw_svg(svg, cell_width, cell_height, i+1, j+1, value)
 
 def create_grille(size: int) -> Tuple[List[List[Union[List[int], int]]], List[List[int]]]:
     s: Tuple[List[List[List[int]]], List[List[List[int]]]] = setup(size)
-    possibilities: List[List[Union[List[int], int]]] = s[0]
-    colonnes: List[List[Union[List[int], int]]] = s[1]
+    possibilities: List[List[Union[List[int], int]]] = list(list(x) for x in s[0])
+    colonnes: List[List[Union[List[int], int]]] = list(list(x) for x in s[1])
 
     for i in range(size*10, 0, -10):
         for j in possibilities:
@@ -151,7 +152,7 @@ def create_grille(size: int) -> Tuple[List[List[Union[List[int], int]]], List[Li
         
     return possibilities, counts
 
-def launch_creation(ev) -> None:
+def launch_creation(ev: DOMEvent) -> None:
     size: int = int(document["size"].value)
     if size < 1 or size > 10:
         return

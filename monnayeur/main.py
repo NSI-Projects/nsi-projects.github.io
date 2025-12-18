@@ -2,6 +2,12 @@ import tkinter as tk
 from tkinter import messagebox
 
 def monnayeur():
+    """
+    Fonction qui monnaie un montant donné en entrée.
+    La fonction affiche un message d'erreur si le montant est négatif ou si la valeur entrée n'est pas un nombre.
+    Sinon, la fonction calcule le nombre de billets et de pièces correspondant au montant donné et affiche le résultat dans une boîte de dialogue.
+    """
+    
     try:
         a = round(float(entry.get()), 2)
         if a < 0:
