@@ -88,7 +88,7 @@ def count(line: Sequence[int]) -> int:
         nb += 1
     return nb
 
-def draw_svg(svg: DOMElement, cell_width: float, cell_height: float, i: int, j: int, value: str) -> None:
+def draw_svg(svg, cell_width: float, cell_height: float, i: int, j: int, value: str) -> None:
     rect = f'<rect x="{(j)*cell_width}" y="{(i)*cell_height}" width="{cell_width}" height="{cell_height}" fill="#2c2c2c" stroke="#fff"/>'
     svg.html += rect
  
@@ -97,11 +97,11 @@ def draw_svg(svg: DOMElement, cell_width: float, cell_height: float, i: int, j: 
     txt = f'<text x="{text_x}" y="{text_y}" fill="white" font-family="monospace" font-size="{min(cell_width, cell_height)/2}" text-anchor="middle" dominant-baseline="middle">{value}</text>'
     svg.html += txt
 
-def on_resize(ev: DOMEvent, possibilities: List[List[Union[List[int], int]]], nbs: List[List[int]], size: int):
+def on_resize(ev, possibilities: List[List[Union[List[int], int]]], nbs: List[List[int]], size: int):
     global resize_timer
     if resize_timer:
-        clear_timeout(resize_timer)
-    resize_timer = set_timeout(lambda: print_list(possibilities, nbs, size), 150)
+        timer.clear_timeout(resize_timer)
+    resize_timer = timer.set_timeout(lambda: print_list(possibilities, nbs, size), 150)
 
 def print_list(possibilities: List[List[Union[List[int], int]]], nbs: List[List[int]], size: int) -> None:
     document["checkbox"].unbind("change")
@@ -109,7 +109,7 @@ def print_list(possibilities: List[List[Union[List[int], int]]], nbs: List[List[
 
     show = document["checkbox"].checked
 
-    svg: DOMElement = document["gridSVG"]
+    svg = document["gridSVG"]
     svg.html = ""
 
     cell_width: float = svg.width / (size+2)
@@ -152,7 +152,7 @@ def create_grille(size: int) -> Tuple[List[List[Union[List[int], int]]], List[Li
         
     return possibilities, counts
 
-def launch_creation(ev: DOMEvent) -> None:
+def launch_creation(ev) -> None:
     size: int = int(document["size"].value)
     if size < 1 or size > 10:
         return
