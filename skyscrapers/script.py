@@ -1,6 +1,6 @@
-from browser import document, window, DOMElement
-from browser.html import *
-from browser.timer import set_timeout, clear_timeout
+# from browser import document, window, DOMElement
+# from browser.html import *
+# from browser.timer import set_timeout, clear_timeout
 
 import random
 from typing import List, Tuple, Union, Sequence
