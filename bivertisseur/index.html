@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>NSI Projects - Bi-vertisseur</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="header">
+            <a class="icon home" href="../index.html"><i class="fa-solid fa-house-user"></i></a>
+            <h2>Le Bi-vertisseur</h2>
+            <a class="icon github" target="_blank" href="https://github.com/NSI-Projects/nsi-projects.github.io/tree/main/bivertisseur"><i class="fa-brands fa-github"></i></a>
+        </div>
+        <button onclick="showTuto()" id="tutoBtn">Montrer les conseils !</button>
+        <div class="tuto">
+            <br>
+            <p>⚠️ Attention, pour la conversion de nombres négatifs, il faut cocher la case et rentrer une taille d'information ! ⚠️</p>
+            <p>⚠️ Attention, Les bases converties vont de 2 à 36 ! ⚠️</p>
+            <br>
+            <p>⚠️ Pour revenir en base 10, il faudra entrer dans la case base la base actuelle de votre nombre et non la base 10 ⚠️</p>
+            <p>⚠️ Néanmoins, pour la conversion de base 10 en base n, il faudra entrer le base souhaitée dans la case base ⚠️</p>
+            <p>⚠️ De plus, pour la conversion de nombre relatifs, il possèdent une taille d'information et sont donc compris dans un intervalle limité, qui dépend de la taille d'information ⚠️</p>
+            <p>⚠️ Enfin, pour la conversion de base X en base 16, il faudra donner votre nombre en base X, sa base dans la case base, et cliquer sur "Convertir base X en base 16 !" ⚠️</p>
+            <p><br>Exemples : <br> Pour convertir 15 (base 10) en 1111 (base 2) il faudra entrer 15 dans la case nombre et 2 dans la case base puis cliquer sur "Convertir !". <br> Pour convertir 1111 (base 2) en 15 (base 10) il faudra entrer 1111 dans la case nombre et <span style="color:orange;">2 dans la case base</span> puis cliquer sur "Revenir base 10 !". <br>Pour convertir 1111 (base 2) en F (base 16), il faudra entrer 1111 dans la case nombre et 2 dans la case base puis cliquer sur "Convertir base X en base 16 !" <br>Pour convertir -128 (base 10) en 10000000 (base 2) il faudra entrer -128 dans la case nombre, 2 dans la case base, cocher la case nombres relatifs avant de rentrer la taille de l'information, qui ici est de 8 bits, puis cliquer sur "Convertir !" <br><br>Pour trouver la taille de l'information, il faut savoir que pour une taille donnée n, les nombres relatifs possibles vont de -2^(n-1) à 2^(n-1)-1.<br>Pour une taille de 8 bits, cela donne -2^(8-1) à 2^(8-1)-1, soit -128 à 127.</p>
+        </div>
+
+        <main class="container">
+            <div class="box">
+                <label class="cb" id="checkbox_label">
+                    <input type="checkbox" id="checkbox">
+                    <span class="checkbox_box"></span>
+                    Nombres relatifs
+                </label>
+                <p>Voici ici le nombre que vous donnerez à convertir :</p>
+                <input placeholder="Entrez votre nombre à convertir !" type="text" id="inputnum">
+                <input type="number" min="2" max="36" placeholder="Entrez votre base !" id="inputbase">
+            </div>
+
+            <div class="box">
+                <input placeholder="Entrez la taille de l'information !" type="text" id="inputsize">
+                <p>Et apparaîtra ici votre nombre converti :</p>
+                <p id="result" style="color: gray;">Apparaîtra ici votre résultat</p>
+                <button onclick="reset()" id="reset">Remettre tout à zéro !</button>
+            </div>
+        </main>
+
+        <main class="container">
+            <div class="box">
+                <button onclick="convert('convert')" id="convert">Convertir !</button>
+            </div>
+            <div class="box">
+                <button onclick="convert('invert')" id="convertback">Revenir base 10 !</button>
+            </div>
+        </main>
+
+        <main class="container">
+            <div class="box">
+                <button onclick="invert()" id="invert">Reprendre le résultat !</button>
+            </div>
+            <div class="box">
+                <button onclick="convert16()" id="convert16">Convertir base X en base 16 !</button>
+            </div>
+        </main>
+    </body>
+    <script src="script.js"></script>
+    <script src="../inspect_script.js"></script>
+</html>

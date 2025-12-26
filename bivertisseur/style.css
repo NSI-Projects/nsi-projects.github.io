@@ -1,0 +1,143 @@
+body {
+    background-color:#1e1e1e;
+    color:#f0f0f0;
+    font-family:Consolas, 
+    monospace;
+    margin:0;
+    padding:0;
+}
+
+.header {
+    align-items:center;
+    padding:1vw;
+    background:#2c2c2c;
+    box-shadow:0 0 5vw rgba(0,0,0,0.4);
+}
+.icon {
+    transition: all 0.5s ease;
+    cursor:pointer;
+    font-size: 3vw;
+    color: #fff;
+    position: fixed;
+    top : 1.5vh;
+}
+.icon:hover {
+    transform: translateY(-0.5vh);
+}
+.icon.home {
+    left: 2vw;
+}
+.icon.github {
+    right: 2vw;
+}
+h2 {
+    text-align:center;
+    color:#fff;
+    margin: 1vh 0;
+    font-size: 2vw;
+}
+
+.tuto {
+    text-align:center;
+    margin: 0.5vh;
+    font-size: 1vw;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 2s ease-in-out, min-height 2s ease-in-out, opacity 1s ease-in-out;
+}
+.tuto.show {
+    opacity: 1;   
+    max-height: 200vh;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2vw;
+    margin-top: 3vh;
+}
+
+.box {
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+}
+
+.box p, .box input, .box #result {
+    padding: 0.7vw;
+    background-color:#2c2c2c;
+    color:#f0f0f0;
+    border:1px solid #f0f0f0;
+    border-radius:6px;
+    aspect-ratio: 15/1;
+    margin: 0;
+    font-size: 1vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family:Consolas, monospace;
+}
+
+button {
+    padding:1vw;
+    background-color:#2c2c2c;
+    color:#f0f0f0;
+    border:1px solid #f0f0f0;
+    border-radius:6px;
+    width: 20vw;
+    aspect-ratio: 5/1;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    margin: 2vh auto 0 auto;
+    display: block;
+    font-family:Consolas, monospace;
+    font-size: 1vw;
+}
+button:hover {
+    transform: translateY(-0.4vh);
+    background-color:#171717;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+
+}
+
+.cb {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    background-color:#2c2c2c;
+    border:1px solid #f0f0f0;
+    border-radius:6px;
+    width: 100%;
+    transition: all 0.5s ease-in-out;
+    font-family:Consolas, monospace;
+    font-size: 1vw;
+    color: #929292;
+    aspect-ratio: 15/1.5;
+}
+.cb input {
+    display: none;
+}
+.cb .checkbox_box {
+    display: inline-block;
+    width: 3vmin;
+    height: 3vmin;
+    border: 2px solid #f0f0f0;
+    border-radius: 4px;
+    transition: all 0.1s ease-in-out;
+    margin-right: 2vmin;
+}
+.cb input:checked + .checkbox_box {
+  background: #929292;
+}
