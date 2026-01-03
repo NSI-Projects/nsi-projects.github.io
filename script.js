@@ -46,21 +46,13 @@ function fetchReadme(folderName) {
 
 async function loadProjectData(folderName) {
     const [readmeData, lastModified] = await Promise.all([
-        () => {
-            if (localStorage.getItem(`readme_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_readme_${folderName}`) < 60 * 60 * 1000) {
-                return JSON.parse(localStorage.getItem(`readme_${folderName}`));
-            } else {
-                return fetchReadme(folderName);
-            }
-        },
-        () => {
-            if (localStorage.getItem(`lastModified_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_lastModified_${folderName}`) < 60 * 60 * 1000) {
-                const dateStr = localStorage.getItem(`lastModified_${folderName}`);
-                return dateStr ? new Date(dateStr) : null;
-            } else {
-                return fetchLastModifiedDate(folderName);
-            }
-        }
+        (localStorage.getItem(`readme_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_readme_${folderName}`) < 60 * 60 * 1000)
+            ? Promise.resolve(JSON.parse(localStorage.getItem(`readme_${folderName}`)))
+            : fetchReadme(folderName),
+
+        (localStorage.getItem(`lastModified_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_lastModified_${folderName}`) < 60 * 60 * 1000)
+            ? Promise.resolve(new Date(localStorage.getItem(`lastModified_${folderName}`)))
+            : fetchLastModifiedDate(folderName)
     ]);
 
     return {
