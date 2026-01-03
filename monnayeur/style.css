@@ -7,17 +7,20 @@ body {
     padding:0; 
 }
 .header {
+    display:flex;
     align-items:center;
+    justify-content:center;
     padding:1vw;
     background:#2c2c2c;
     box-shadow:0 0 5vw rgba(0,0,0,0.4);
+    position:relative;
 }
 .icon {
     transition: all 0.5s ease;
     cursor:pointer;
     font-size: 3vw;
     color: #fff;
-    position: fixed;
+    position: absolute;
     top : 1.5vh;
 }
 .icon:hover {
