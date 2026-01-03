@@ -56,7 +56,7 @@ function createProjectLink(folder, title, description, date, container=document.
     link.classList.add("project-link", "project-site");
 
     const formattedDate = date
-        ? `🕒 Modifié le ${date.toLocaleDateString("fr-FR")}`
+        ? `🕒 Modifié le ${date.toLocaleDateString("fr-FR")} à ${date.getHours()}h${String(date.getMinutes()).padStart(2,'0')}`
         : "";
 
     link.innerHTML = `
