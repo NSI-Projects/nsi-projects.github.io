@@ -18,7 +18,7 @@ function createProjectLink(folder, title, description, container=document.getEle
 }
 
 function loadProject(folderName) {
-    const readmeUrl = `https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/${folderName}/README.md`;
+    const readmeUrl = `https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/${folderName}/readme.md`;
 
     fetch(readmeUrl)
     .then(res => {
