@@ -9,10 +9,7 @@ function createProjectLink(folder, title, description, container=document.getEle
     link.href = `${folder}/index.html`;
     link.classList.add("project-link", "project-site");
 
-    link.innerHTML = `
-        🔗 <strong>${title}</strong>
-        <div class="project-desc">${description}</div>
-    `;
+    link.innerHTML = `${title}<div class="project-desc">${description}</div>`;
 
     container.appendChild(link);
 }

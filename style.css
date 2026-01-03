@@ -48,6 +48,12 @@ h1 {
 .turtle-timer-link:hover {
     transform: translateY(-0.4vh);
 }
+.project-desc {
+  font-size: 1vmin;
+  color: #555;
+  margin-left: 20px;
+}
+
 .scrollTopBtn {
     opacity: 0;
     pointer-events: none;
