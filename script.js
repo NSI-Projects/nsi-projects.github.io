@@ -1,54 +1,100 @@
 function formatName(name) {
-return name
-    .replace(/-/g, " ")
-    .replace(/\b\w/g, letter => letter.toUpperCase());
+    return name
+        .replace(/[-_]/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
 }
 
-function createProjectLink(folder, title, description, container=document.getElementById("projects-div")) {
+function fetchLastModifiedDate(folderName) {
+    const url = `https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/commits?path=${folderName}&per_page=1`;
+
+    return fetch(url)
+        .then(res => res.ok ? res.json() : [])
+        .then(commits => {
+        if (commits.length === 0) return null;
+        return new Date(commits[0].commit.author.date);
+    });
+}
+
+function fetchReadme(folderName) {
+    const url = `https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/${folderName}/README.md`;
+
+    return fetch(url)
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+        if (!data) return null;
+
+        const content = decodeURIComponent(
+            escape(atob(data.content))
+        );
+
+        const lines = content.split("\n");
+
+        return {
+            title: lines[0]?.replace(/^#\s*/, "").trim() || formatName(folderName),
+            description: lines.slice(2).join(" ").trim()
+        };
+    });
+}
+
+async function loadProjectData(folderName) {
+    const [readmeData, lastModified] = await Promise.all([
+        fetchReadme(folderName),
+        fetchLastModifiedDate(folderName)
+    ]);
+
+    return {
+        folder: folderName,
+        title: readmeData?.title || formatName(folderName),
+        description: readmeData?.description || "",
+        lastModified
+    };
+}
+
+function createProjectLink(folder, title, description, date, container=document.getElementById("projects-div")) {
     const link = document.createElement("a");
     link.href = `${folder}/index.html`;
     link.classList.add("project-link", "project-site");
 
-    link.innerHTML = `${title}<div class="project-desc">${description}</div>`;
+    const formattedDate = date
+        ? `🕒 Modifié le ${date.toLocaleDateString("fr-FR")}`
+        : "";
+
+    link.innerHTML = `
+        <div class="project-title">${title}</div>
+        <div class="project-desc">${description}</div>
+        <div class="project-date">${formattedDate}</div>
+    `;
 
     container.appendChild(link);
 }
 
-function loadProject(folderName) {
-    const readmeUrl = `https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/${folderName}/readme.md`;
+window.addEventListener("DOMContentLoaded", async () => {
+    const container = document.getElementById("projects-div");
 
-    fetch(readmeUrl)
-    .then(res => {
-        if (!res.ok) throw new Error("Pas de README");
-            return res.json();
-    })
-    .then(data => {
-        const content = decodeURIComponent(
-            escape(atob(data.content))
+    const res = await fetch(`https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/`);
+    const items = await res.json();
+
+    const folders = items.filter(item => item.type === "dir");
+
+    document.getElementById("projects-count").textContent =
+        folders.length > 0
+        ? `📂 ${folders.length} projets disponibles`
+        : "❌ Aucun projet trouvé.";
+
+    const projects = await Promise.all(
+        folders.map(folder => loadProjectData(folder.name))
+    );
+
+    projects.sort((a, b) => b.lastModified - a.lastModified);
+    projects.forEach(project => {
+        createProjectLink(
+        project.folder,
+        project.title,
+        project.description,
+        project.lastModified,
+        container
         );
-        const lines = content.split("\n");
-
-        const title = lines[0].replace(/^#\s*/, "").trim();
-        const description = lines.slice(2).join(" ").trim();
-
-        createProjectLink(folderName, title, description);
-    })
-    .catch(() => {
-        createProjectLink(folderName, folderName, "");
-    });
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-    fetch(`https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/`)
-    .then(res => res.json())
-    .then(items => {
-        items
-        .filter(item => item.type === "dir")
-        .forEach(item => loadProject(item.name));
-        document.getElementById("projects-count").textContent = items.filter(item => item.type === "dir").length > 0
-            ? `📂 ${items.filter(item => item.type === "dir").length} projets disponibles` 
-            : "❌ Aucun projet trouvé.";
-    });
+  });
 });
 
 let mybutton = document.getElementById("scrollTopBtn");
