@@ -1,3 +1,3 @@
 # 🔗 Le Bi-Vertisseur
 
-Un outil pour convertir des nombres positifs et négatifs d'une base d'écriture à une autre.
+Convertit des nombres écrits dans une base comprise entre 2 et 36 dans une autre base, avec support des nombres relatifs.

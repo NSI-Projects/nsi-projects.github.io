@@ -1,3 +1,3 @@
 # 🔗 Le jeu du Skyscrapers
 
-Un générateur de grille pour le jeu du skyscrapers, de taille 1x1 à 10x10, avec possibilité de cacher la réponse.
+Crée des grilles de taille 1X1 à 10X10 pour le jeu du Skyscrapers, avec indices, et permet de cacher ou afficher la solution.

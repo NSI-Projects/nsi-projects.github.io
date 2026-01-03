@@ -1,3 +1,3 @@
 # 🔗 Le Monnayeur
 
-Un outil pour calculer les billets et pièces nécessaires pour rendre un certain montant en euro.
+Calcule la répartition de billets et pièces pour un montant donné, en prenant le billet ou la pièce avec le montant le plus élevé possible.
