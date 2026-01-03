@@ -10,8 +10,10 @@ function fetchLastModifiedDate(folderName) {
     return fetch(url)
         .then(res => res.ok ? res.json() : [])
         .then(commits => {
-        if (commits.length === 0) return null;
-        return new Date(commits[0].commit.author.date);
+            localStorage.setItem(`lastModified_${folderName}`, JSON.stringify(commits[0]?.commit.author.date || null));
+            localStorage.setItem(`cacheTime_lastModified_${folderName}`, Date.now());
+            if (commits.length === 0) return null;
+            return new Date(commits[0].commit.author.date);
     });
 }
 
@@ -29,6 +31,12 @@ function fetchReadme(folderName) {
 
         const lines = content.split("\n");
 
+        localStorage.setItem(`readme_${folderName}`, JSON.stringify({
+            title: lines[0]?.replace(/^#\s*/, "").trim() || formatName(folderName),
+            description: lines.slice(2).join(" ").trim()
+        }));
+        localStorage.setItem(`cacheTime_readme_${folderName}`, Date.now());
+        
         return {
             title: lines[0]?.replace(/^#\s*/, "").trim() || formatName(folderName),
             description: lines.slice(2).join(" ").trim()
@@ -38,8 +46,21 @@ function fetchReadme(folderName) {
 
 async function loadProjectData(folderName) {
     const [readmeData, lastModified] = await Promise.all([
-        fetchReadme(folderName),
-        fetchLastModifiedDate(folderName)
+        () => {
+            if (localStorage.getItem(`readme_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_readme_${folderName}`) < 60 * 60 * 1000) {
+                return JSON.parse(localStorage.getItem(`readme_${folderName}`));
+            } else {
+                return fetchReadme(folderName);
+            }
+        },
+        () => {
+            if (localStorage.getItem(`lastModified_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_lastModified_${folderName}`) < 60 * 60 * 1000) {
+                const dateStr = localStorage.getItem(`lastModified_${folderName}`);
+                return dateStr ? new Date(dateStr) : null;
+            } else {
+                return fetchLastModifiedDate(folderName);
+            }
+        }
     ]);
 
     return {
