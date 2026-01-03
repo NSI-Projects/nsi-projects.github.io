@@ -26,7 +26,9 @@ function loadProject(folderName) {
             return res.json();
     })
     .then(data => {
-        const content = atob(data.content);
+        const content = decodeURIComponent(
+            escape(atob(data.content))
+        );
         const lines = content.split("\n");
 
         const title = lines[0].replace(/^#\s*/, "").trim();
