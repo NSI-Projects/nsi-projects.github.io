@@ -1,5 +1,5 @@
 function formatName(name) {
-    return name
+    return "🔗 " + name
         .replace(/[-_]/g, " ")
         .replace(/\b\w/g, char => char.toUpperCase());
 }
@@ -16,7 +16,7 @@ function fetchLastModifiedDate(folderName) {
 }
 
 function fetchReadme(folderName) {
-    const url = `https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/${folderName}/README.md`;
+    const url = `https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/${folderName}/readme.md`;
 
     return fetch(url)
         .then(res => res.ok ? res.json() : null)
