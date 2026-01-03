@@ -10,7 +10,7 @@ function fetchLastModifiedDate(folderName) {
     return fetch(url)
         .then(res => res.ok ? res.json() : [])
         .then(commits => {
-            localStorage.setItem(`lastModified_${folderName}`, JSON.stringify(commits[0]?.commit.author.date || null));
+            localStorage.setItem(`lastModified_${folderName}`, commits[0]?.commit.author.date || null);
             localStorage.setItem(`cacheTime_lastModified_${folderName}`, Date.now());
             if (commits.length === 0) return null;
             return new Date(commits[0].commit.author.date);
