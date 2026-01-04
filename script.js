@@ -92,7 +92,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     document.getElementById("projects-count").textContent =
         folders.length > 0
-        ? `📂 ${folders.length-4} projets disponibles`
+        ? `📂 ${folders.length} projets disponibles`
         : "❌ Aucun projet trouvé.";
 
     const projects = await Promise.all(
