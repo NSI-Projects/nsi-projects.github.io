@@ -82,16 +82,17 @@ function createProjectLink(folder, title, description, date, container=document.
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
+    const names = ["admin", "login", "signup", "src"];
     const container = document.getElementById("projects-div");
 
     const res = await fetch(`https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/`);
     const items = await res.json();
 
-    const folders = items.filter(item => item.type === "dir");
+    const folders = items.filter(item => item.type === "dir" && !names.includes(item.name));
 
     document.getElementById("projects-count").textContent =
         folders.length > 0
-        ? `📂 ${folders.length} projets disponibles`
+        ? `📂 ${folders.length-4} projets disponibles`
         : "❌ Aucun projet trouvé.";
 
     const projects = await Promise.all(
@@ -100,6 +101,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     projects.sort((a, b) => b.lastModified - a.lastModified);
     projects.forEach(project => {
+        if (names.includes(project.folder)) return;
         createProjectLink(
         project.folder,
         project.title,
