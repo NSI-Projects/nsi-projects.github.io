@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>NSI Projects - Login</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+        <script src="../src/supabase.js" defer></script>
+        <script src="script.js" defer></script>
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" href="../src/favicon.ico" type="image/x-icon">
+    </head>
+    <body>
+        <div class="header">
+            <a class="icon home" href="../index.html"><i class="fa-solid fa-house-user"></i></a>
+            <h2>Connexion à NSI Projects</h2>
+        </div>
+
+        <div id="signin-page" class="signin-page">
+            <p class="error" id="error"></p>
+            <div id="login" class="login">
+                <input id="email" type="email" placeholder="Email">
+                <input id="password" type="password" placeholder="Mot de passe" autocomplete="off">
+                <button onclick="login()">Connexion</button>
+            </div>
+            <a href="../signup/index.html" id="signup" class="signup">S'inscrire</a>
+        </div>
+
+        <div id="logout-page" class="logout-page" style="display: none;">
+            <button onclick="logout()">Déconnexion</button>
+        </div>
+    </body>
+    <script src="../src/inspect_script.js"></script>
+</html>

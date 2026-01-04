@@ -55,19 +55,24 @@ h1 {
     margin-left: 20px;
 }
 
-.turtle-timer-link {
+.link {
     text-align: center;
     aspect-ratio: 1/1;
     transition: all 0.5s ease-in-out;
     font-size: 8vmin;
     color:#f0f0f0;
     text-decoration:none;
-    position: fixed;
+    position: absolute;
     bottom: 2vh;
+}
+.link:hover {
+    transform: translateY(-0.4vh);
+}
+.turtle-timer {
     left: 1vw;
 }
-.turtle-timer-link:hover {
-    transform: translateY(-0.4vh);
+.login {
+    right: 1vw;
 }
 
 .scrollTopBtn {
