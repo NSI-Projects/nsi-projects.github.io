@@ -7,7 +7,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
         <script src="../src/supabase.js" defer></script>
-        <script src="script.js" defer></script>
         <link rel="stylesheet" href="style.css">
         <link rel="icon" href="../src/favicon.ico" type="image/x-icon">
     </head>
@@ -17,7 +16,7 @@
             <h2>Connexion à NSI Projects</h2>
         </div>
 
-        <div id="signin-page" class="signin-page">
+        <div id="signin-page" class="signin-page" style="display: none;">
             <p class="error" id="error"></p>
             <div id="login" class="login">
                 <input id="email" type="email" placeholder="Email">
@@ -33,13 +32,17 @@
                 <p><strong>Email :</strong> <span id="user-email"></span></p>
                 <p><strong>Utilisateur créé le :</strong> <span id="user-created-at"></span></p>
                 <p><strong>Dernière connexion le :</strong> <span id="user-connected-at"></span></p>
-                <p><strong>Admin :</strong> <span id="user-admin"></span></p>
+                <p><strong>Admin :</strong> <span id="user-admin">chargement...</span></p>
             </div>
             <p class="deletion-log" id="deletion-log"></p>
             <button class="logout-button" onclick="logout()">Déconnexion</button>
         </div>
+
+        <div class="access-waiting" id="access-waiting">
+            <h3>chargement...</h3>
+            <p>Nous chargons votre session...</p>
+        </div>
     </body>
-    <script type="module" src="auth.js"></script>
-    <script type="module" src="../admin/admin.js"></script>
+    <script type="module" src="script.js" defer></script>
     <script type="module" src="../src/inspect_script.js"></script>
 </html>

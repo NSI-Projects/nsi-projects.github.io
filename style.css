@@ -62,7 +62,7 @@ h1 {
     font-size: 8vmin;
     color:#f0f0f0;
     text-decoration:none;
-    position: absolute;
+    position: fixed;
     bottom: 2vh;
 }
 .link:hover {
@@ -101,4 +101,26 @@ h1 {
 .scrollTopBtn:hover {
     background-color: #5a5a5a;
     transform: translateY(-0.4vh);
+}
+
+.project-beta {
+    background: #000000;
+}
+.project-beta:hover {
+    background: #1a1a1a;
+}
+
+.project-building.click {
+    background: #c0392b;
+    animation: shake-red 0.6s ease;
+}
+
+@keyframes shake-red {
+    0%   { transform: translateX(0); }
+    15%  { transform: translateX(-3px); }
+    30%  { transform: translateX(3px); }
+    45%  { transform: translateX(-3px); }
+    60%  { transform: translateX(3px); }
+    75%  { transform: translateX(-2px); }
+    100% { transform: translateX(0); }
 }

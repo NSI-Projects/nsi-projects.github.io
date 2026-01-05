@@ -1,76 +1,54 @@
-function formatName(name) {
-    return "🔗 " + name
-        .replace(/[-_]/g, " ")
-        .replace(/\b\w/g, char => char.toUpperCase());
-}
+import { fetchLastModifiedDate, fetchReadme, formatName, check_status } from "./src/projects.js";
 
-function fetchLastModifiedDate(folderName) {
-    const url = `https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/commits?path=${folderName}&per_page=1`;
+async function loadProjectData(folderName, state) {
+    if (state === "normal" ||state === "beta") {
+        var [readmeData, lastModified] = await Promise.all([
+            (localStorage.getItem(`readme_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_${folderName}`) < 60 * 60 * 1000)
+                ? Promise.resolve(JSON.parse(localStorage.getItem(`readme_${folderName}`)))
+                : fetchReadme(folderName),
 
-    return fetch(url)
-        .then(res => res.ok ? res.json() : [])
-        .then(commits => {
-            localStorage.setItem(`lastModified_${folderName}`, commits[0]?.commit.author.date || null);
-            localStorage.setItem(`cacheTime_lastModified_${folderName}`, Date.now());
-            if (commits.length === 0) return null;
-            return new Date(commits[0].commit.author.date);
-    });
-}
-
-function fetchReadme(folderName) {
-    const url = `https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/${folderName}/readme.md`;
-
-    return fetch(url)
-        .then(res => res.ok ? res.json() : null)
-        .then(data => {
-        if (!data) return null;
-
-        const content = decodeURIComponent(
-            escape(atob(data.content))
-        );
-
-        const lines = content.split("\n");
-
-        localStorage.setItem(`readme_${folderName}`, JSON.stringify({
-            title: lines[0]?.replace(/^#\s*/, "").trim() || formatName(folderName),
-            description: lines.slice(2).join(" ").trim()
-        }));
-        localStorage.setItem(`cacheTime_readme_${folderName}`, Date.now());
-        
-        return {
-            title: lines[0]?.replace(/^#\s*/, "").trim() || formatName(folderName),
-            description: lines.slice(2).join(" ").trim()
+            (localStorage.getItem(`lastModified_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_${folderName}`) < 60 * 60 * 1000)
+                ? Promise.resolve(new Date(localStorage.getItem(`lastModified_${folderName}`)))
+                : fetchLastModifiedDate(folderName)
+        ]);
+    } else if (state === "building") {
+        var readmeData = {
+            description: "Ce projet est en cours de construction, revenez plus tard !"
         };
-    });
-}
-
-async function loadProjectData(folderName) {
-    const [readmeData, lastModified] = await Promise.all([
-        (localStorage.getItem(`readme_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_readme_${folderName}`) < 60 * 60 * 1000)
-            ? Promise.resolve(JSON.parse(localStorage.getItem(`readme_${folderName}`)))
-            : fetchReadme(folderName),
-
-        (localStorage.getItem(`lastModified_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_lastModified_${folderName}`) < 60 * 60 * 1000)
-            ? Promise.resolve(new Date(localStorage.getItem(`lastModified_${folderName}`)))
-            : fetchLastModifiedDate(folderName)
-    ]);
+        var lastModified = "À venir";
+    }
 
     return {
         folder: folderName,
-        title: readmeData?.title || formatName(folderName),
-        description: readmeData?.description || "",
-        lastModified
+        title: readmeData.title? readmeData.title : formatName(folderName),
+        description: readmeData.description? readmeData.description : "",
+        lastModified: lastModified
     };
 }
 
-function createProjectLink(folder, title, description, date, container=document.getElementById("projects-div")) {
+function createProjectLink(folder, title, description, date, container=document.getElementById("projects-div"), state) {
     const link = document.createElement("a");
-    link.href = `${folder}/index.html`;
-    link.classList.add("project-link", "project-site");
-
-    const formattedDate = date
+    if (state === "normal" || state === "beta") {
+        link.href = `${folder}/index.html`;
+        var formattedDate = date
         ? `🕒 Modifié le ${date.toLocaleDateString("fr-FR")} à ${date.getHours()}h${String(date.getMinutes()).padStart(2,'0')}`
         : "";
+    } else {
+        var formattedDate = `🕒 ${date}`;
+    }
+    link.classList.add("project-link", "project-site");
+    if (state === "building") {
+        link.classList.add("project-building");
+        link.addEventListener("click", () => {
+            link.classList.add("click");
+            setTimeout(() => link.classList.remove("click"), 600);
+        })
+    }
+
+    if (state === "beta") {
+        link.classList.add("project-beta");
+        description += " <span style='color: #f00;'>Attention, ce projet est en beta, il peut contenir des bugs. Si vous en trouvez, vous pouvez les signaler en envoyant un mail à cette adresse : nsi.projects.contact@gmail.com<span>";
+    }
 
     link.innerHTML = `
         <div class="project-title">${title}</div>
@@ -82,34 +60,81 @@ function createProjectLink(folder, title, description, date, container=document.
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
-    const names = ["admin", "login", "signup", "src"];
     const container = document.getElementById("projects-div");
 
     const res = await fetch(`https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/`);
     const items = await res.json();
 
-    const folders = items.filter(item => item.type === "dir" && !names.includes(item.name));
+    const folders = [];
+    const building = [];
+    const beta = [];
+
+    for (const item of items) {
+        if (item.type !== "dir") continue;
+
+        const status = await check_status(item.name);
+        if (status === "hidden") {
+            continue;
+        } else if (status === "building") {
+            building.push(item);
+        } else if (status === "beta") {
+            beta.push(item);
+        } else {
+            folders.push(item);
+        }
+    }
 
     document.getElementById("projects-count").textContent =
-        folders.length > 0
-        ? `📂 ${folders.length} projets disponibles`
+        folders.length + building.length + beta.length > 0
+        ? `📂 ${folders.length + building.length + beta.length} projets disponibles`
         : "❌ Aucun projet trouvé.";
 
     const projects = await Promise.all(
-        folders.map(folder => loadProjectData(folder.name))
+        folders.map(folder => loadProjectData(folder.name, "normal"))
     );
+
+    const buildingProjects = await Promise.all(
+        building.map(folder => loadProjectData(folder.name, "building"))
+    )
+
+    const betaProjects = await Promise.all(
+        beta.map(folder => loadProjectData(folder.name, "beta"))
+    )
 
     projects.sort((a, b) => b.lastModified - a.lastModified);
     projects.forEach(project => {
-        if (names.includes(project.folder)) return;
         createProjectLink(
-        project.folder,
-        project.title,
-        project.description,
-        project.lastModified,
-        container
+            project.folder,
+            project.title,
+            project.description,
+            project.lastModified,
+            container,
+            "normal"
         );
-  });
+    });
+
+    buildingProjects.forEach(project => {
+        createProjectLink(
+            project.folder,
+            project.title,
+            project.description,
+            project.lastModified,
+            container,
+            "building"
+        );
+    });
+
+    betaProjects.sort((a, b) => b.lastModified - a.lastModified);
+    betaProjects.forEach(project => {
+        createProjectLink(
+            project.folder,
+            project.title,
+            project.description,
+            project.lastModified,
+            container,
+            "beta"
+        );
+    });
 });
 
 let mybutton = document.getElementById("scrollTopBtn");
@@ -121,6 +146,6 @@ window.addEventListener("scroll", () => {
     }
 });
 
-function topFunction() {
+window.topFunction = function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
