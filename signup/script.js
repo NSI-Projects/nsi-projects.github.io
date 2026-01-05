@@ -14,7 +14,7 @@ async function signup() {
     }
 
     const { error } = await sb.auth.signUp({
-        email: email.value,
+        email: email.value.toLowerCase(),
         password: password.value
     });
 
@@ -22,7 +22,8 @@ async function signup() {
         document.getElementById("error").innerHTML = "Erreur : l'identifiant est peut-être utilisé.<br>Déjà un compte ? Connectez-vous !";
     } else {
         document.getElementById("error").textContent = "";
-        await sb.from("Projects").insert([{email: email.value}]);
+        await sb.from("Projects").insert([{email: email.value.toLowerCase()}]);
+        alert("Le compte à l'email " + email.value.toLowerCase() + " a été créé avec succès ! Vous pouvez maintenant vous connecter.");
         email.value = "";
         password.value = "";
         password2.value = "";

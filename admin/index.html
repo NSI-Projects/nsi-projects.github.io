@@ -17,9 +17,22 @@
             <h2>Panel Admin</h2>
         </div>
 
-        <div id="panel" class="panel">
-            <button onclick="test()">Test</button>
+        <div id="panel" class="panel" style="display: none;">
+            <h2>Voici le panel admin</h2>
+            <p>Si vous avez les droits administrateurs, vous pourrez utiliser les boutons ci-dessous.</p>
+            <span class="---"></span>
+            <div class="box">
+                <h3>Gestion des administrateurs</h3>
+                <button onclick="promote()">Ajouter un administrateur</button>
+                <button onclick="unpromote()">Supprimer un administrateur</button>
+            </div>
+        </div>
+
+        <div class="access-refused" id="access-refused">
+            <h3>Accès refusé</h3>
+            <p>Vous n'avez pas les droits administrateurs pour accéder à cette page.</p>
         </div>
     </body>
     <script src="../src/inspect_script.js"></script>
+    <script type="module" src="panel.js"></script>
 </html>

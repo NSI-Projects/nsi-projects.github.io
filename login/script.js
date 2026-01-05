@@ -2,13 +2,13 @@ async function login() {
     const email = document.getElementById("email");
     const password = document.getElementById("password");
 
-    if (email === "" || password === "") {
+    if (email.value === "" || password.value === "") {
         document.getElementById("error").textContent = "Veuillez remplir tous les champs.";
         return;
     }
 
     const { error } = await sb.auth.signInWithPassword({
-        email: email.value,
+        email: email.value.toLowerCase(),
         password: password.value
     });
 
@@ -24,13 +24,3 @@ async function login() {
 async function logout() {
     await sb.auth.signOut();
 }
-
-sb.auth.onAuthStateChange((event, session) => {
-    if (session) {
-        document.getElementById("signin-page").style.display = "none";
-        document.getElementById("logout-page").style.display = "block";
-    } else {
-        document.getElementById("signin-page").style.display = "block";
-        document.getElementById("logout-page").style.display = "none";
-    }
-});
