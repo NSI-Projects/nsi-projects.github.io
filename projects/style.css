@@ -88,6 +88,12 @@ body {
     gap: 2vw;
 }
 
+.show-project-info button.active {
+    background: #1b7e00;
+}
+.show-project-info button.active:hover {
+    background: #125200;
+}
 
 .show-project-info {
     text-align: left;
@@ -146,4 +152,10 @@ body {
 .project-button:hover {
     background: #5a5a5a;
     transform: translateY(-2px);
+}
+
+.panel p.error {
+    color: #ff4d4d;
+    font-size: 1vw;
+    margin: 2vh 0 0 0;
 }

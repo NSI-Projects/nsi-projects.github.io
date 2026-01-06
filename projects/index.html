@@ -22,15 +22,18 @@
             <span class="---"></span>
             <div class="projects-box" id="projects-box">
             </div>
+            <p id="error" class="error"></p>
         </div>
 
         <div id="show-project-info" class="show-project-info" style="display: none;">
             <h3>Voici les informations du projet : <span id="project-id"></span></h3>
-            <p><strong>Dernière modification le :</strong> <span id="project-connected-at"></span></p>
+            <p><strong>Description :</strong> <span id="project-desc"></span></p>
+            <p><strong>Dernière modification le :</strong> <span id="project-created-at"></span></p>
+            <p><strong>Nom brut :</strong> <span id="project-raw-name"></span></p>
             <div class="button-box">
-                <button onclick="hide_project()">Cacher le projet</button>
-                <button onclick="build_project()">Mettre le projet en construction</button>
-                <button onclick="beta_project()">Mettre le projet en bêta</button>
+                <button onclick="change_setting('hidden')" id="hidden">Cacher le projet</button>
+                <button onclick="change_setting('building')" id="building">Mettre le projet en construction</button>
+                <button onclick="change_setting('beta')" id="beta">Mettre le projet en bêta</button>
             </div>
         </div>
 

@@ -1,9 +1,22 @@
 import { is_admin } from "../src/admin.js";
-import { fetchLastModifiedDate, fetchReadme, formatName, check_status } from "../src/projects.js";
+import { fetchLastModifiedDate, fetchReadme, check_status } from "../src/projects.js";
 
 async function display_info(name) {
+    document.getElementById("error").textContent = "Chargement des informations du projet...";
+    document.getElementById("error").style.color = "white";
+
     document.getElementById("project-id").innerHTML = "chargement...";
-    document.getElementById("project-connected-at").textContent = "chargement...";
+    document.getElementById("project-desc").textContent = "chargement...";
+    document.getElementById("project-created-at").textContent = "chargement...";
+    document.getElementById("project-raw-name").textContent = "chargement...";
+
+    document.getElementById("beta").classList.remove("active");
+    document.getElementById("building").classList.remove("active");
+    document.getElementById("hidden").classList.remove("active");
+    document.getElementById("beta").disabled = true;
+    document.getElementById("building").disabled = true;
+    document.getElementById("hidden").disabled = true;
+
     const { data: projectData, error: projectError } = await sb
         .from("CurrentProjects")
         .select("*")
@@ -11,12 +24,23 @@ async function display_info(name) {
         .single();
 
     const readme = await fetchReadme(name);
-    console.log(readme);
 
+    document.getElementById("project-id").innerHTML = "<span style=\"color: #d1ffe7ff;\">" + readme.title + "</span>";
+    document.getElementById("project-desc").textContent = readme.description;
+    document.getElementById("project-created-at").textContent = new Date(await fetchLastModifiedDate(name)).toLocaleString("fr-FR");
+    document.getElementById("project-raw-name").textContent = name;
+
+    const status = await check_status(name);
+    if (status) {
+        document.getElementById(status).classList.add("active");
+    }
+    document.getElementById("error").textContent = "";
+    document.getElementById("error").style.color = "red";
+
+    document.getElementById("beta").disabled = false;
+    document.getElementById("building").disabled = false;
+    document.getElementById("hidden").disabled = false;
     document.getElementById("show-project-info").style.display = "block";
-
-    document.getElementById("project-id").innerHTML = "<span style=\"color: #d1ffe7ff;\">" + readme.title || formatName(name) + "</span>";
-
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -50,3 +74,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         accessWaiting.style.display = "none";
     }
 });
+
+window.change_setting = async function (settingName) {
+    const isActive = document.getElementById(settingName).classList.contains("active") ? true : false;
+
+    await sb
+        .from("CurrentProjects")
+        .update({
+            [settingName]: !isActive
+        })
+        .eq("project", document.getElementById("project-raw-name").textContent)
+        .single();
+    document.getElementById(settingName).classList.toggle("active", !isActive);
+}

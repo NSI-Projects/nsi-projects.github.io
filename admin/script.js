@@ -164,4 +164,5 @@ window.synchronize_projects = async function () {
             }
         }
     }
+    alert("Synchronisation des projets effectuée.");
 }
