@@ -31,9 +31,10 @@
             <p><strong>Dernière modification le :</strong> <span id="project-created-at"></span></p>
             <p><strong>Nom brut :</strong> <span id="project-raw-name"></span></p>
             <div class="button-box">
-                <button onclick="change_setting('hidden')" id="hidden">Cacher le projet</button>
-                <button onclick="change_setting('building')" id="building">Mettre le projet en construction</button>
-                <button onclick="change_setting('beta')" id="beta">Mettre le projet en bêta</button>
+                <button onclick="change_setting('hidden')" id="hidden">Cacher</button>
+                <button onclick="change_setting('building')" id="building">Construction</button>
+                <button onclick="change_setting('beta')" id="beta">Bêta</button>
+                <button onclick="change_setting('refused')" id="refused">Refuser l'accès</button>
             </div>
         </div>
 
@@ -50,4 +51,5 @@
     </body>
     <script type="module" src="script.js"></script>
     <script src="../src/inspect_script.js"></script>
+    <script type="module" src="../src/path_checker.js"></script>
 </html>

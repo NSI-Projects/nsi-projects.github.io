@@ -51,7 +51,10 @@ export async function check_status(project) {
         .eq("project", project)
         .single();
 
-    if (data.hidden === true) return "hidden";
-    if (data.building === true) return "building";
-    if (data.beta === true) return "beta";
+    return {
+        refused: data.refused,
+        hidden: data.hidden,
+        beta: data.beta,
+        building: data.building
+    };
 }

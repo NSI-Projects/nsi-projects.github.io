@@ -31,9 +31,9 @@ async function display_info(name) {
     document.getElementById("project-raw-name").textContent = name;
 
     const status = await check_status(name);
-    if (status) {
-        document.getElementById(status).classList.add("active");
-    }
+    Object.entries(status).forEach(([key, value]) => {
+        document.getElementById(key).classList.toggle("active", value);
+    });
     document.getElementById("error").textContent = "";
     document.getElementById("error").style.color = "red";
 
