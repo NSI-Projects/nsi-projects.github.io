@@ -15,11 +15,8 @@ async function display_info(email) {
     document.getElementById("user-created-at").textContent = "chargement...";
     document.getElementById("user-connected-at").textContent = "chargement...";
     document.getElementById("user-admin").innerHTML = "chargement...";
-    const { data: userData, error: userError } = await sb
-        .from("DataUsers")
-        .select("*")
-        .eq("email", email)
-        .single();
+
+    const userData = await getUserData(email);
 
     document.getElementById("show-user-info").style.display = "block";
 

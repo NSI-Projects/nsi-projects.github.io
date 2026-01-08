@@ -55,6 +55,7 @@ export async function check_status(project) {
         refused: data.refused,
         hidden: data.hidden,
         beta: data.beta,
-        building: data.building
+        building: data.building,
+        admin: data.admin
     };
 }

@@ -32,7 +32,9 @@ async function display_info(name) {
 
     const status = await check_status(name);
     Object.entries(status).forEach(([key, value]) => {
-        document.getElementById(key).classList.toggle("active", value);
+        if (typeof value === "boolean") {
+            document.getElementById(key).classList.toggle("active", value);
+        }
     });
     document.getElementById("error").textContent = "";
     document.getElementById("error").style.color = "red";

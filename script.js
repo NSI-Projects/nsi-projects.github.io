@@ -1,4 +1,5 @@
 import { fetchLastModifiedDate, fetchReadme, formatName, check_status } from "./src/projects.js";
+import { is_admin, getUserData } from "./src/admin.js";
 
 async function loadProjectData(folderName, state) {
     var [readmeData, lastModified] = await Promise.all([
@@ -78,27 +79,17 @@ window.addEventListener("DOMContentLoaded", async () => {
             folders.push(item);
         }
 
-        folders.forEach(folder => {
-            if (folder.state.hidden === false) nb_displayed_projects += 1;
-        })
-
         var projects = await Promise.all(
             folders.map(folder => loadProjectData(folder.name, folder.state))
         );
 
         localStorage.setItem("projects", JSON.stringify(projects));
-        localStorage.setItem("projectsNumber", nb_displayed_projects);
         localStorage.setItem("projectsCacheTime", Date.now());
     }
-
-    document.getElementById("projects-count").textContent =
-        nb_displayed_projects > 0
-        ? `📂 ${nb_displayed_projects} projets disponibles`
-        : "❌ Aucun projet trouvé.";
-
+    
     projects.sort((a, b) => b.lastModified - a.lastModified);
-    projects.forEach(project => {
-        if (project.state.hidden === false) {
+    for (const project of projects) {
+        if (project.state.hidden === false && await is_admin("", project.state.admin) === true) {
             createProjectLink(
                 project.folder,
                 project.title,
@@ -108,7 +99,13 @@ window.addEventListener("DOMContentLoaded", async () => {
                 project.state
             );
         }
-    });
+    }
+
+    nb_displayed_projects = document.querySelectorAll(".project-site").length;
+    document.getElementById("projects-count").textContent =
+        nb_displayed_projects > 0
+        ? `📂 ${nb_displayed_projects} projets disponibles`
+        : "❌ Aucun projet trouvé.";
 });
 
 let mybutton = document.getElementById("scrollTopBtn");

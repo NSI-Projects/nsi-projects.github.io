@@ -19,12 +19,7 @@ window.promote = async function () {
     }
     const user = session?.user;
 
-    const { data: userData, error: userError } = await sb
-        .from("DataUsers")
-        .select("*")
-        .eq("email", email)
-        .single();
-
+    const userData = await getUserData(email);
 
     const { data, error } = await sb.rpc('promote_user', { target_email: email.toLowerCase() });
 
@@ -54,11 +49,7 @@ window.unpromote = async function () {
     }
     const user = session?.user;
 
-    const { data: userData, error: userError } = await sb
-        .from("DataUsers")
-        .select("*")
-        .eq("email", email)
-        .single();
+    const userData = await getUserData(email);
 
     const { data, error } = await sb.rpc('demote_user', { target_email: email.toLowerCase() });
 
