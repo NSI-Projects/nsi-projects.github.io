@@ -151,11 +151,33 @@ body {
 }
 .project-button:hover {
     background: #5a5a5a;
-    transform: translateY(-2px);
+    transform: translateY(-0.5vh);
 }
 
 .panel p.error {
     color: #ff4d4d;
     font-size: 1vw;
     margin: 2vh 0 0 0;
+}
+.selector-box select {
+    padding: 1vw;
+    border-radius: 6px;
+    border: none;
+    font-family: inherit;
+    font-size: 1.5vw;
+    background-color: #3a3a3a;
+    color: #f0f0f0;
+    outline: none;
+    transition: background 0.5s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+.selector-box select:hover {
+    background-color: #5a5a5a;
+    transform: translateY(-0.5vh);
+}
+.selector-box {
+    margin-bottom: 2vh;
+    display: flex;
+    align-items: center;
+    gap: 1vw;
 }

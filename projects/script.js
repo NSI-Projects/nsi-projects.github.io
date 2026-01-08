@@ -9,6 +9,7 @@ async function display_info(name) {
     document.getElementById("project-desc").textContent = "chargement...";
     document.getElementById("project-created-at").textContent = "chargement...";
     document.getElementById("project-raw-name").textContent = "chargement...";
+    document.getElementById("security-level-loading").textContent = "chargement...";
 
     document.getElementById("beta").classList.remove("active");
     document.getElementById("building").classList.remove("active");
@@ -16,21 +17,18 @@ async function display_info(name) {
     document.getElementById("beta").disabled = true;
     document.getElementById("building").disabled = true;
     document.getElementById("hidden").disabled = true;
+    document.getElementById("security-level").style.display = "none";
 
-    const { data: projectData, error: projectError } = await sb
-        .from("CurrentProjects")
-        .select("*")
-        .eq("project", name)
-        .single();
-
+    const status = await check_status(name);
     const readme = await fetchReadme(name);
 
     document.getElementById("project-id").innerHTML = "<span style=\"color: #d1ffe7ff;\">" + readme.title + "</span>";
     document.getElementById("project-desc").textContent = readme.description;
     document.getElementById("project-created-at").textContent = new Date(await fetchLastModifiedDate(name)).toLocaleString("fr-FR");
     document.getElementById("project-raw-name").textContent = name;
+    document.getElementById("security-level").value = status.admin
+    document.getElementById("security-level-loading").textContent = "";
 
-    const status = await check_status(name);
     Object.entries(status).forEach(([key, value]) => {
         if (typeof value === "boolean") {
             document.getElementById(key).classList.toggle("active", value);
@@ -43,6 +41,7 @@ async function display_info(name) {
     document.getElementById("building").disabled = false;
     document.getElementById("hidden").disabled = false;
     document.getElementById("show-project-info").style.display = "block";
+    document.getElementById("security-level").style.display = "block";
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -89,3 +88,20 @@ window.change_setting = async function (settingName) {
         .single();
     document.getElementById(settingName).classList.toggle("active", !isActive);
 }
+
+const select = document.getElementById("security-level");
+select.addEventListener("change", async (event) => {
+    const value = event.target.value;
+    select.disabled = true;
+    setTimeout(() => {
+        select.disabled = false;
+    }, 5000)
+    
+    await sb
+        .from("CurrentProjects")
+        .update({
+            admin: value
+        })
+        .eq("project", document.getElementById("project-raw-name").textContent)
+        .single();
+});

@@ -30,6 +30,17 @@
             <p><strong>Description :</strong> <span id="project-desc"></span></p>
             <p><strong>Dernière modification le :</strong> <span id="project-created-at"></span></p>
             <p><strong>Nom brut :</strong> <span id="project-raw-name"></span></p>
+            <div class="selector-box">
+                <label for="security-level">Niveau de sécurité : <span id="security-level-loading"></span></label>
+                <select id="security-level" name="security-level">
+                    <option value="0">0 — Utilisateur</option>
+                    <option value="1">1 — Guardien</option>
+                    <option value="2">2 — Modérateur</option>
+                    <option value="3">3 — Resp. Modérateurs</option>
+                    <option value="4">4 — Administrateur</option>
+                    <option value="5">5 — Resp. Administrateurs</option>
+                </select>
+            </div>
             <div class="button-box">
                 <button onclick="change_setting('hidden')" id="hidden">Cacher</button>
                 <button onclick="change_setting('building')" id="building">Construction</button>
