@@ -1,4 +1,3 @@
-import { check_status } from "../src/projects.js";
 import { is_admin } from "../src/admin.js";
 
 async function checkProjectAccess() {
@@ -8,12 +7,16 @@ async function checkProjectAccess() {
 
     if (!projectName) return;
 
-    const status = await check_status(projectName);
-    if (await is_admin("", status.admin)) return;
+    const { data, error } = await sb
+        .from("CurrentProjects")
+        .select("*")
+        .eq("project", projectName)
+        .single();
 
-    if (status.refused === true) {
-        window.location.replace("../refused.html");
-    }
+    if (data.refused === false) return;
+    if (await is_admin("", data.admin)) return;
+
+    window.location.replace("../refused.html");
 }
 
 checkProjectAccess();

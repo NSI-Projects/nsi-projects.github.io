@@ -146,9 +146,11 @@ window.synchronize_projects = async function () {
         }
 
         if (!folderData) {
+            const title = prompt(`Entrez le titre du projet ${folder.name} :`);
+            const description = prompt(`Entrez la description du projet ${folder.name} :`);
             const { error: insertError } = await sb
                 .from("CurrentProjects")
-                .insert({ project: folder.name });
+                .insert({ project: folder.name, title: title, description: description });
 
             if (insertError) {
                 console.error(insertError);

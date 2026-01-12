@@ -1,31 +1,13 @@
-import { fetchLastModifiedDate, fetchReadme, formatName, check_status } from "./src/projects.js";
-import { is_admin, getUserData } from "./src/admin.js";
-
-async function loadProjectData(folderName, state) {
-    var [readmeData, lastModified] = await Promise.all([
-        (localStorage.getItem(`readme_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_${folderName}`) < 60 * 60 * 1000)
-            ? Promise.resolve(JSON.parse(localStorage.getItem(`readme_${folderName}`)))
-            : fetchReadme(folderName),
-
-        (localStorage.getItem(`lastModified_${folderName}`) && Date.now() - localStorage.getItem(`cacheTime_${folderName}`) < 60 * 60 * 1000)
-            ? Promise.resolve(new Date(localStorage.getItem(`lastModified_${folderName}`)))
-            : fetchLastModifiedDate(folderName)
-    ]);
-
-    return {
-        folder: folderName,
-        title: readmeData?.title? readmeData.title : formatName(folderName),
-        description: readmeData?.description? readmeData.description : "",
-        lastModified: lastModified,
-        state: state
-    };
-}
+import { fetchLastModifiedDate, formatName } from "./src/projects.js";
+import { is_admin } from "./src/admin.js";
 
 function createProjectLink(folder, title, description, date, container=document.getElementById("projects-div"), state) {
     const link = document.createElement("a");
-    if (state.building === false) {
+    if (state.refused === false) {
         link.href = `${folder}/index.html`;
-
+    }
+ 
+    if (state.building === false) {
         if (typeof date === "string") {
             date = new Date(date);
         }
@@ -70,33 +52,37 @@ window.addEventListener("DOMContentLoaded", async () => {
         const res = await fetch(`https://api.github.com/repos/NSI-Projects/nsi-projects.github.io/contents/`);
         const items = await res.json();
 
-        const folders = [];
+        var projects = [];
 
         for (const item of items) {
-            if (item.type !== "dir") continue;
-
-            item.state = await check_status(item.name);
-            folders.push(item);
+            if (item.type === "dir") {
+                projects.push(item);
+            }
         }
 
-        var projects = await Promise.all(
-            folders.map(folder => loadProjectData(folder.name, folder.state))
-        );
+        const { data: projectData, error } = await sb
+            .from("CurrentProjects")
+            .select("*")
 
+        for (const project of projects) {
+            project.db = projectData.find(p => p.project === project.name);
+            if (!localStorage.getItem(`lastModified_${project.name}`) || Date.now() - localStorage.getItem(`cacheTime_${project.name}`) >= 60 * 60 * 1000) {
+                await fetchLastModifiedDate(project.name);
+            }
+        }
         localStorage.setItem("projects", JSON.stringify(projects));
         localStorage.setItem("projectsCacheTime", Date.now());
     }
-    
-    projects.sort((a, b) => b.lastModified - a.lastModified);
+    projects.sort((a, b) => localStorage.getItem(`lastModified_${b.name}`) - localStorage.getItem(`lastModified_${a.name}`));
     for (const project of projects) {
-        if (project.state.hidden === false && await is_admin("", project.state.admin) === true) {
+        if (project.db.hidden === false && await is_admin("", project.db.admin) === true) {
             createProjectLink(
-                project.folder,
-                project.title,
-                project.state.building === false ? project.description : "Ce projet est en cours de construction, revenez plus tard !",
-                project.state.building === false ? project.lastModified : "À venir",
+                project.name,
+                project.db.title? project.db.title : formatName(project.name),
+                project.db.building === false ? (project.db.description? project.db.description : "Ce projet n'a pas encore de description.") : "Ce projet est en cours de construction, revenez plus tard !",
+                project.db.building === false ? localStorage.getItem(`lastModified_${project.name}`) : "À venir",
                 container,
-                project.state
+                project.db
             );
         }
     }

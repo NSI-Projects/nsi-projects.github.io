@@ -1,7 +1,9 @@
 import { is_admin } from "../src/admin.js";
-import { fetchLastModifiedDate, fetchReadme, check_status } from "../src/projects.js";
+import { fetchLastModifiedDate, formatName } from "../src/projects.js";
 
-async function display_info(name) {
+let projects = [];
+
+async function display_info(project) {
     document.getElementById("error").textContent = "Chargement des informations du projet...";
     document.getElementById("error").style.color = "white";
 
@@ -19,17 +21,14 @@ async function display_info(name) {
     document.getElementById("hidden").disabled = true;
     document.getElementById("security-level").style.display = "none";
 
-    const status = await check_status(name);
-    const readme = await fetchReadme(name);
-
-    document.getElementById("project-id").innerHTML = "<span style=\"color: #d1ffe7ff;\">" + readme.title + "</span>";
-    document.getElementById("project-desc").textContent = readme.description;
-    document.getElementById("project-created-at").textContent = new Date(await fetchLastModifiedDate(name)).toLocaleString("fr-FR");
-    document.getElementById("project-raw-name").textContent = name;
-    document.getElementById("security-level").value = status.admin
+    document.getElementById("project-id").innerHTML = "<span style=\"color: #d1ffe7ff;\">" + project.title? project.title : formatName(project.project) + "</span>";
+    document.getElementById("project-desc").textContent = project.building === false ? (project.description? project.description : "Ce projet n'a pas encore de description.") : "Ce projet est en cours de construction, revenez plus tard !";
+    document.getElementById("project-created-at").textContent = project.building === false ? (localStorage.getItem(`lastModified_${project.project}`)? new Date(localStorage.getItem(`lastModified_${project.project}`)).toLocaleString("fr-FR") : new Date(await fetchLastModifiedDate(project.project)).toLocaleString("fr-FR")) : "À venir";
+    document.getElementById("project-raw-name").textContent = project.project;
+    document.getElementById("security-level").value = project.admin;
     document.getElementById("security-level-loading").textContent = "";
 
-    Object.entries(status).forEach(([key, value]) => {
+    Object.entries(project).forEach(([key, value]) => {
         if (typeof value === "boolean") {
             document.getElementById(key).classList.toggle("active", value);
         }
@@ -52,9 +51,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const projects_box = document.getElementById("projects-box");
 
     if (admin) {
-        const { data: projects, error } = await sb
+        const { data, error } = await sb
             .from("CurrentProjects")
             .select("*")
+        
+        projects = data;
 
         projects.forEach(project => {
             const button = document.createElement("button");
@@ -64,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
 
             button.addEventListener("click", () => {
-                display_info(project.project);
+                display_info(project);
             });
             projects_box.appendChild(button);
         });
@@ -87,6 +88,9 @@ window.change_setting = async function (settingName) {
         .eq("project", document.getElementById("project-raw-name").textContent)
         .single();
     document.getElementById(settingName).classList.toggle("active", !isActive);
+    
+    const project = projects.find(p => p.project === document.getElementById("project-raw-name").textContent);
+    project[settingName] = !isActive;
 }
 
 const select = document.getElementById("security-level");
