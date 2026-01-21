@@ -14,7 +14,7 @@ export async function getUserData(email="") {
     return userData;
 }
 
-export async function is_admin(user_email, rank) {
+export async function is_admin(user_email, rank, user_data=null) {
     if (user_email === "") {
         const { data: { session }, error } = await sb.auth.getSession();
         var email = session?.user.email;
@@ -23,7 +23,7 @@ export async function is_admin(user_email, rank) {
         var email = user_email;
     }
 
-    const userData = await getUserData(email);
+    const userData = user_data || await getUserData(email);
 
     return userData?.rank >= rank;
 }

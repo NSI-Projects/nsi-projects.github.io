@@ -23,7 +23,6 @@ Objectif :
   - Rank 5 : promote 0 → 5 | demote 4 → 0 + Rank 5
 - Toute action met à jour :
   - le champ `rank` en DB
-  - les permissions RLS associées
 
 #### Contraintes :
 - Même sans refresh de session, une requête non autorisée doit échouer
@@ -71,8 +70,6 @@ Objectif :
 - Vérifier permissions via RLS
 
 #### À ne PAS faire :
-- pas de report interne
-- pas de notes internes
 - pas de validation pour l’instant
 
 ---
@@ -84,7 +81,7 @@ Objectif :
 
 #### À faire :
 - Même permissions que Guides
-- Modifier description / tags sans approbation
+- Modifier description / tags (sans approbation)
 
 ---
 
@@ -134,11 +131,6 @@ Objectif :
 - Champ en DB pour message global
 - Affichage sur la page d’accueil
 - Édition réservée aux Admins+
-
-Exemples :
-- maintenance DB
-- bugs possibles
-- info importante
 
 ---
 
@@ -211,10 +203,4 @@ Exemples :
 ---
 
 ## 🐢 Note développeur
-
-Ce document est volontairement :
-- progressif
-- réaliste
-- sans fonctionnalités gadgets
-
 Chaque phase peut être développée indépendamment.

@@ -1,5 +1,5 @@
 import { fetchLastModifiedDate, formatName } from "./src/projects.js";
-import { is_admin } from "./src/admin.js";
+import { is_admin, getUserData } from "./src/admin.js";
 
 function createProjectLink(folder, title, description, date, container=document.getElementById("projects-div"), state) {
     const link = document.createElement("a");
@@ -73,9 +73,14 @@ window.addEventListener("DOMContentLoaded", async () => {
         localStorage.setItem("projects", JSON.stringify(projects));
         localStorage.setItem("projectsCacheTime", Date.now());
     }
+    const user_data = await getUserData();
     projects.sort((a, b) => localStorage.getItem(`lastModified_${b.name}`) - localStorage.getItem(`lastModified_${a.name}`));
     for (const project of projects) {
-        if (project.db.hidden === false && await is_admin("", project.db.admin) === true) {
+        const project_is_admin = await is_admin("", project.db.admin, user_data);
+        if (project.db.hidden === false && project_is_admin === true) {
+            if (project_is_admin === true) {
+                project.db.refused = false;
+            }
             createProjectLink(
                 project.name,
                 project.db.title? project.db.title : formatName(project.name),
