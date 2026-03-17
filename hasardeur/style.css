@@ -1,0 +1,187 @@
+body {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+    font-family: "Consolas", monospace;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1vw;
+    background: #2c2c2c;
+    box-shadow: 0 0 5vw rgba(0, 0, 0, 0.4);
+    position: relative;
+}
+
+.icon {
+    transition: all 0.5s ease;
+    cursor: pointer;
+    font-size: 3vw;
+    color: #fff;
+    position: absolute;
+    top: 1.5vh;
+}
+
+.icon:hover {
+    transform: translateY(-0.5vh);
+}
+
+.icon.home {
+    left: 2vw;
+}
+
+.icon.github {
+    right: 2vw;
+}
+
+h2 {
+    text-align: center;
+    color: #fff;
+    margin: 1vh 0;
+    font-size: 2vw;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2vw;
+    margin-top: 5vh;
+}
+
+.box {
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+    align-items: center;
+}
+
+#result {
+    padding: 2vw;
+    background-color: #2c2c2c;
+    color: #f0f0f0;
+    border: 1px solid #f0f0f0;
+    border-radius: 6px;
+    width: 100%;
+    min-height: 5vh;
+    font-size: 2vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+button {
+    padding: 1vw;
+    background-color: #2c2c2c;
+    color: #f0f0f0;
+    border: 1px solid #f0f0f0;
+    border-radius: 6px;
+    width: 20vw;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    margin: 2vh auto;
+    display: block;
+    font-family: Consolas, monospace;
+    font-size: 1vw;
+}
+
+button:hover {
+    transform: translateY(-0.4vh);
+    background-color: #171717;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    background-color: #1e1e1e;
+    margin: 5% auto;
+    padding: 2vw;
+    border: 1px solid #f0f0f0;
+    border-radius: 6px;
+    width: 50vw;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.student-list-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1vh;
+    margin-top: 2vh;
+}
+
+.cb {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background-color: #2c2c2c;
+    border: 1px solid #f0f0f0;
+    border-radius: 6px;
+    padding: 0.5vw;
+    transition: all 0.3s ease;
+    font-size: 0.9vw;
+    color: #f0f0f0;
+}
+
+.cb input {
+    display: none;
+}
+
+.cb .checkbox_box {
+    display: inline-block;
+    width: 1.5vw;
+    height: 1.5vw;
+    border: 1px solid #f0f0f0;
+    border-radius: 3px;
+    margin-right: 1vw;
+}
+
+.cb input:checked+.checkbox_box {
+    background: #03dac6;
+}
+
+.close-modal {
+    float: right;
+    cursor: pointer;
+    color: #f0f0f0;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e1e1e; 
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #444; 
+    border-radius: 10px;
+    border: 2px solid #1e1e1e;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #03dac6;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #444 #1e1e1e;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>NSI Projects - Hasardeur</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="header">
+        <a class="icon home" href="../index.html"><i class="fa-solid fa-house-user"></i></a>
+        <h2>Le Hasardeur</h2>
+        <a class="icon github" target="_blank" href="https://github.com/NSI-Projects/nsi-projects.github.io/"><i
+                class="fa-brands fa-github"></i></a>
+    </div>
+
+    <main class="container">
+        <div class="box">
+            <p>Cliquez pour choisir un élève au hasard :</p>
+            <div id="result">Prêt ?</div>
+            <button onclick="pickRandom()">TIRER AU SORT !</button>
+        </div>
+
+        <div class="box">
+            <p>Configuration de la classe :</p>
+            <button onclick="toggleModal(true)">Gérer la liste des élèves</button>
+        </div>
+    </main>
+
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal(false)"><i class="fa-solid fa-xmark"></i></span>
+            <h3 style="text-align: center;">Présence des élèves</h3>
+
+            <div style="display: flex; justify-content: center; gap: 1vw; margin-bottom: 2vh;">
+                <button onclick="setAll(true)" style="width: 12vw; margin: 0; font-size: 0.8vw;">Tout cocher</button>
+                <button onclick="setAll(false)" style="width: 12vw; margin: 0; font-size: 0.8vw;">Tout décocher</button>
+            </div>
+
+            <div id="studentList" class="student-list-container">
+            </div>
+
+            <button onclick="toggleModal(false)" style="width: 10vw; margin-top: 3vh;">Fermer</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
